@@ -42,8 +42,10 @@ jobs:
           echo "SERVICE_NAME=demo-app-${{ github.ref_name }}" >> $GITHUB_ENV
 
       - name: Build Image
-        run: docker build -t us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/app-repo/${IMAGE_NAME}:${{ github.sha }} ./app
-            
+        env:
+         PROJECT_ID: dev1-500309
+         IMAGE_NAME: demo-app
+        run: docker build -t us-central1-docker.pkg.dev/$PROJECT_ID/app-repo/$IMAGE_NAME:${{ github.sha }} .
 
       - name: Push Image
         run: |
