@@ -11,6 +11,10 @@ on:
 permissions:
   contents: read
   id-token: write
+env:
+  REGION: us-central1
+  SERVICE_NAME: demo-app-dev
+  IMAGE_URI: us-central1-docker.pkg.dev/dev1-500309/app-repo/demo-app-dev
 
 jobs:
   deploy:
@@ -42,18 +46,18 @@ jobs:
           echo "SERVICE_NAME=demo-app-${{ github.ref_name }}" >> $GITHUB_ENV
 
       - name: Build Image
-        env:
-         PROJECT_ID: dev1-500309
-         IMAGE_NAME: demo-app
-        run: docker build -t us-central1-docker.pkg.dev/$PROJECT_ID/app-repo/$IMAGE_NAME:${{ github.sha }} ./app
+        run: docker build -t $IMAGE_URI:${{ github.sha }} ./app
+
+      - name: Check Local Images
+        run: docker images
 
       - name: Push Image
-        run: docker push us-central1-docker.pkg.dev/dev1-500309/app-repo/demo-app-dev:${{ github.sha }}
-        
+        run: docker push $IMAGE_URI:${{ github.sha }}
+
       - name: Deploy Cloud Run
         run: |
-          gcloud run deploy ${SERVICE_NAME} \
-            --image us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/app-repo/${IMAGE_NAME}:${{ github.sha }} \
-            --region us-central1 \
-            --platform managed \
-            --allow-unauthenticated
+         gcloud run deploy $SERVICE_NAME \
+         --image $IMAGE_URI:${{ github.sha }} \
+         --region $REGION \
+         --platform managed \
+         --allow-unauthenticated
