@@ -48,10 +48,8 @@ jobs:
         run: docker build -t us-central1-docker.pkg.dev/$PROJECT_ID/app-repo/$IMAGE_NAME:${{ github.sha }} ./app
 
       - name: Push Image
-        run: |
-          docker push \
-            us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/app-repo/${IMAGE_NAME}:${{ github.sha }}
-
+        run: docker push us-central1-docker.pkg.dev/$PROJECT_ID/app-repo/$IMAGE_NAME:${{ github.sha }}
+        
       - name: Deploy Cloud Run
         run: |
           gcloud run deploy ${SERVICE_NAME} \
