@@ -48,7 +48,7 @@ jobs:
         run: docker build -t us-central1-docker.pkg.dev/$PROJECT_ID/app-repo/$IMAGE_NAME:${{ github.sha }} ./app
 
       - name: Push Image
-        run: docker push us-central1-docker.pkg.dev/$PROJECT_ID/app-repo/$IMAGE_NAME:${{ github.sha }}
+        run: docker push us-central1-docker.pkg.dev/dev1-500309/app-repo/demo-app-dev:${{ github.sha }}
         
       - name: Deploy Cloud Run
         run: |
