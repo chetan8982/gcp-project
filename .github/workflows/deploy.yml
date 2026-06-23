@@ -44,8 +44,9 @@ jobs:
       - name: Build Image
         run: |
           docker build \
-            -t us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/app-repo/${IMAGE_NAME}:${{ github.sha }} \
-            ./app
+      - name: Build Image
+        run: docker build -t us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/app-repo/${IMAGE_NAME}:${{ github.sha }} ./app
+            
 
       - name: Push Image
         run: |
