@@ -43,19 +43,19 @@ jobs:
 
       - name: Build Image
         run: |
-         docker build \
-         -t us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/app-repo/${IMAGE_NAME}:${{ github.sha }} \
-         .
+          docker build \
+            -t us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/app-repo/${IMAGE_NAME}:${{ github.sha }} \
+            ./app
 
       - name: Push Image
         run: |
-         docker push \
-         us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/app-repo/${IMAGE_NAME}:${{ github.sha }}
+          docker push \
+            us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/app-repo/${IMAGE_NAME}:${{ github.sha }}
 
       - name: Deploy Cloud Run
         run: |
-         gcloud run deploy ${SERVICE_NAME} \
-         --image us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/app-repo/${IMAGE_NAME}:${{ github.sha }} \
-         --region us-central1 \
-         --platform managed \
-         --allow-unauthenticated
+          gcloud run deploy ${SERVICE_NAME} \
+            --image us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/app-repo/${IMAGE_NAME}:${{ github.sha }} \
+            --region us-central1 \
+            --platform managed \
+            --allow-unauthenticated
