@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+      - dev
+      - qa
+      - prod
 
 permissions:
   contents: read
@@ -20,8 +23,8 @@ jobs:
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: projects/966067546153/locations/global/workloadIdentityPools/github-pool/providers/github-provider
-          service_account: my-first-account@project-6be88d2f-4f8a-4f11-837.iam.gserviceaccount.com
+          workload_identity_provider: projects/315009712922/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+          service_account: my-first-qa@qa01-500309.iam.gserviceaccount.com
 
       - name: Setup GCloud
         uses: google-github-actions/setup-gcloud@v2
@@ -33,18 +36,18 @@ jobs:
       - name: Build Image
         run: |
           docker build \
-            -t us-central1-docker.pkg.dev/project-6be88d2f-4f8a-4f11-837/app-repo/demo-app:${{ github.sha }} \
+            -t us-central1-docker.pkg.dev/qa01-500309/app-repo/demo-app-qa:${{ github.sha }} \
             ./app
 
       - name: Push Image
         run: |
           docker push \
-            us-central1-docker.pkg.dev/project-6be88d2f-4f8a-4f11-837/app-repo/demo-app:${{ github.sha }}
+            us-central1-docker.pkg.dev/qa01-500309/app-repo/demo-app-qa:${{ github.sha }}
 
       - name: Deploy Cloud Run
         run: |
           gcloud run deploy demo-app \
-            --image us-central1-docker.pkg.dev/project-6be88d2f-4f8a-4f11-837/app-repo/demo-app:${{ github.sha }} \
+            --image us-central1-docker.pkg.dev/qa01-500309/app-repo/demo-app:${{ github.sha }} \
             --region us-central1 \
             --platform managed \
             --allow-unauthenticated
