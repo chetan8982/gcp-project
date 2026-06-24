@@ -1,12 +1,9 @@
-name: Deploy to Cloud Run
+name: Deploy to Cloud Run QA
 
 on:
   push:
     branches:
-      - main
-      - dev
       - qa
-      - prod
 
 permissions:
   contents: read
@@ -46,8 +43,8 @@ jobs:
 
       - name: Deploy Cloud Run
         run: |
-          gcloud run deploy demo-app \
-            --image us-central1-docker.pkg.dev/qa01-500309/app-repo/demo-app:${{ github.sha }} \
+          gcloud run deploy demo-app-qa \
+            --image us-central1-docker.pkg.dev/qa01-500309/app-repo/demo-app-qa:${{ github.sha }} \
             --region us-central1 \
             --platform managed \
             --allow-unauthenticated
